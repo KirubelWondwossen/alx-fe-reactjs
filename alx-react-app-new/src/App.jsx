@@ -1,3 +1,4 @@
+import Counter from "./Counter";
 import Header from './Header'; // prettier-ignore
 import MainContent from './MainContent'; // prettier-ignore
 import Footer from './Footer'; // prettier-ignore
@@ -8,6 +9,7 @@ import "./App.css";
 function App() {
   return (
     <>
+      <Counter />
       <UserProfile name="Alice" age="25" bio="Loves hiking and photography" />
       <Header />
       <MainContent />
