@@ -1,27 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./Home";
-import About from "./About";
-import Services from "./Services";
-import Contact from "./Contact";
-import "./App.css";
+import Home from "./component/Home";
+import About from "./component/About";
+import Services from "./component/Services";
+import Contact from "./component/Contact";
+import Navbar from "./component/Navbar";
 
 function App() {
-  const navStyle = {
-    padding: "15px",
-    backgroundColor: "#282c34",
-    display: "flex",
-    justifyContent: "center",
-    gap: "20px",
-    marginBottom: "30px",
-  };
-
-  const linkStyle = {
-    color: "white",
-    textDecoration: "none",
-    fontSize: "18px",
-    fontWeight: "bold",
-  };
-
   const pageWrapper = {
     padding: "20px",
     fontFamily: "Arial, sans-serif",
@@ -29,21 +13,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <nav style={navStyle}>
-        <Link to="/" style={linkStyle}>
-          Home
-        </Link>
-        <Link to="/about" style={linkStyle}>
-          About
-        </Link>
-        <Link to="/services" style={linkStyle}>
-          Services
-        </Link>
-        <Link to="/contact" style={linkStyle}>
-          Contact
-        </Link>
-      </nav>
-
+      <Navbar />
       <div style={pageWrapper}>
         <Routes>
           <Route path="/" element={<Home />} />
