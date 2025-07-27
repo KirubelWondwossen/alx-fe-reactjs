@@ -1,6 +1,6 @@
 import create from "zustand";
 
-const useRecipeStore = create((set) => ({
+const useRecipeStore = create((set, get) => ({
   recipes: [],
   addRecipe: (newRecipe) =>
     set((state) => ({ recipes: [...state.recipes, newRecipe] })),
@@ -15,6 +15,27 @@ const useRecipeStore = create((set) => ({
         recipe.id === id ? { ...recipe, ...updatedData } : recipe
       ),
     })),
+
+  searchTerm: "",
+  setSearchTerm: (term) => {
+    set({ searchTerm: term });
+    get().filterRecipes();
+  },
+
+  filteredRecipes: [],
+  filterRecipes: () => {
+    const { recipes, searchTerm } = get();
+    if (!searchTerm.trim()) {
+      // If search term is empty, show all recipes
+      set({ filteredRecipes: recipes });
+    } else {
+      set({
+        filteredRecipes: recipes.filter((recipe) =>
+          recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
+        ),
+      });
+    }
+  },
 
   setRecipes: (recipes) => set({ recipes }),
 }));
