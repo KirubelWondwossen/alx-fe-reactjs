@@ -1,59 +1,110 @@
 import { useState } from "react";
-import fetchUserData from "../services/githubService";
+import searchUsers from "../services/githubService";
 
 function Search() {
   const [username, setUsername] = useState("");
-  const [data, setData] = useState(null);
+  const [location, setLocation] = useState("");
+  const [minRepos, setMinRepos] = useState("");
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!username.trim()) return;
-
     setLoading(true);
     setError(false);
-    setData(null);
+    setUsers([]);
 
     try {
-      const result = await fetchUserData(username.trim());
-      setData(result);
+      const results = await searchUsers({ username, location, minRepos });
+      setUsers(results);
     } catch (err) {
       setError(true);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <button type="submit">Search</button>
+    <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow-md">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="username" className="block font-medium">
+            Username
+          </label>
+          <input
+            id="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full px-4 py-2 border rounded"
+          />
+        </div>
+        <div>
+          <label htmlFor="location" className="block font-medium">
+            Location
+          </label>
+          <input
+            id="location"
+            type="text"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            className="w-full px-4 py-2 border rounded"
+          />
+        </div>
+        <div>
+          <label htmlFor="minRepos" className="block font-medium">
+            Min Public Repos
+          </label>
+          <input
+            id="minRepos"
+            type="number"
+            min="0"
+            value={minRepos}
+            onChange={(e) => setMinRepos(e.target.value)}
+            className="w-full px-4 py-2 border rounded"
+          />
+        </div>
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full"
+        >
+          Search
+        </button>
       </form>
 
-      {loading && <p>Loading...</p>}
-      {error && <p>Looks like we cant find the user</p>}
-      {data && (
-        <div style={{ marginTop: "1rem" }}>
-          <img
-            src={data.avatar_url}
-            alt="Avatar"
-            style={{ width: "100px", borderRadius: "50%" }}
-          />
-          <p>Name: {data.name || "No name provided"}</p>
-          <p>Username: {data.login}</p> {/* ✅ Required: `login` */}
-          <a href={data.html_url} target="_blank" rel="noopener noreferrer">
-            View GitHub Profile
-          </a>
-        </div>
+      {loading && <p className="mt-4 text-center text-gray-600">Loading...</p>}
+      {error && (
+        <p className="mt-4 text-center text-red-500">
+          Looks like we cant find the user
+        </p>
       )}
+
+      <div className="mt-6 space-y-4">
+        {users.map((user) => (
+          <div
+            key={user.login}
+            className="flex items-center space-x-4 border p-4 rounded"
+          >
+            <img
+              src={user.avatar_url}
+              alt={user.login}
+              className="w-16 h-16 rounded-full"
+            />
+            <div>
+              <h2 className="text-lg font-semibold">{user.login}</h2>
+              <a
+                href={user.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline"
+              >
+                View Profile
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
