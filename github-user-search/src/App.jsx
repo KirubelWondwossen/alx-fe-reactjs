@@ -1,26 +1,20 @@
 // App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Services from "./pages/Services";
-import Contact from "./pages/Contact";
+import Form from "./components/Search";
 
 function App() {
   return (
-    <Router>
-      <div>
-        <Navbar />
-        <div className="p-4">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/contact" element={<Contact />} />
-          </Routes>
-        </div>
-      </div>
-    </Router>
+    <div
+      style={{
+        margin: "0 auto",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Form />
+    </div>
   );
 }
 
