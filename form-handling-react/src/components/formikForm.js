@@ -22,7 +22,7 @@ export default function FormikForm() {
       onSubmit={(values, { setSubmitting, resetForm }) => {
         console.log("Form submitted:", values);
         setSubmitting(false);
-        resetForm();
+        resetForm(); // clear form after submit
       }}
     >
       {({ isSubmitting }) => (
