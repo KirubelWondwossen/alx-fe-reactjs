@@ -1,18 +1,12 @@
-// src/components/ProtectedRoute.jsx
-import React from "react";
-import { Navigate } from "react-router-dom";
+// src/hooks/useAuth.js
+import { useState } from "react";
 
-/**
- * ProtectedRoute component
- * @param {ReactNode} children - The component(s) to render if authenticated
- * @param {boolean} isAuthenticated - Whether the user is logged in
- */
-export default function ProtectedRoute({ children, isAuthenticated }) {
-  // If user is not authenticated, redirect to login
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
+// Simulate authentication state
+export default function useAuth() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // If authenticated, render the children
-  return children;
+  const login = () => setIsAuthenticated(true);
+  const logout = () => setIsAuthenticated(false);
+
+  return { isAuthenticated, login, logout };
 }
