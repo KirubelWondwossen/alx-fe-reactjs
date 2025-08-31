@@ -5,20 +5,34 @@ export default function RegistrationForm() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({}); // store field-specific errors
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!username || !email || !password) {
-      setError("All fields are required.");
+    let validationErrors = {};
+
+    if (!username) {
+      validationErrors.username = "Username is required";
+    }
+    if (!email) {
+      validationErrors.email = "Email is required";
+    }
+    if (!password) {
+      validationErrors.password = "Password is required";
+    }
+
+    // If errors exist, update state and stop submission
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
 
-    setError("");
+    // Clear errors if validation passes
+    setErrors({});
     console.log("Form submitted:", { username, email, password });
 
-    // Clear fields after submission
+    // Reset form fields
     setUsername("");
     setEmail("");
     setPassword("");
@@ -31,8 +45,7 @@ export default function RegistrationForm() {
     >
       <h2 className="text-xl font-bold mb-4">Register</h2>
 
-      {error && <p className="text-red-500 mb-2">{error}</p>}
-
+      {/* Username */}
       <div className="mb-3">
         <label className="block mb-1 font-medium">Username</label>
         <input
@@ -42,8 +55,12 @@ export default function RegistrationForm() {
           className="w-full p-2 border rounded"
           placeholder="Enter username"
         />
+        {errors.username && (
+          <p className="text-red-500 text-sm">{errors.username}</p>
+        )}
       </div>
 
+      {/* Email */}
       <div className="mb-3">
         <label className="block mb-1 font-medium">Email</label>
         <input
@@ -53,8 +70,12 @@ export default function RegistrationForm() {
           className="w-full p-2 border rounded"
           placeholder="Enter email"
         />
+        {errors.email && (
+          <p className="text-red-500 text-sm">{errors.email}</p>
+        )}
       </div>
 
+      {/* Password */}
       <div className="mb-3">
         <label className="block mb-1 font-medium">Password</label>
         <input
@@ -64,6 +85,9 @@ export default function RegistrationForm() {
           className="w-full p-2 border rounded"
           placeholder="Enter password"
         />
+        {errors.password && (
+          <p className="text-red-500 text-sm">{errors.password}</p>
+        )}
       </div>
 
       <button
