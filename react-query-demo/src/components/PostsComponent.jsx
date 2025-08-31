@@ -22,8 +22,10 @@ export default function PostsComponent() {
   } = useQuery({
     queryKey: ["posts"], // cache key
     queryFn: fetchPosts,
-    staleTime: 5000, // data is considered fresh for 5s
+    staleTime: 5000, // data is fresh for 5s
     cacheTime: 1000 * 60 * 5, // cache persists for 5 minutes
+    refetchOnWindowFocus: true, // refetch when window gains focus
+    keepPreviousData: true, // keep old data while fetching new
   });
 
   if (isLoading) return <p>Loading posts...</p>;
