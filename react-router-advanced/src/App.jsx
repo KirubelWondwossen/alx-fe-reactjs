@@ -1,36 +1,28 @@
 // src/App.jsx
 import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Home from "./components/Home";
 import Profile from "./components/Profile";
-import ProfileDetails from "./components/ProfileDetails";
-import ProfileSettings from "./components/ProfileSettings";
-import Post from "./components/Post";
 import Login from "./components/Login";
+import BlogPost from "./components/BlogPost"; // Dynamic route component
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // simple auth
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        
-        {/* Protected Route */}
+
+        {/* Profile with protected route */}
         <Route
           path="/profile/*"
-          element={
-            isAuthenticated ? <Profile /> : <Navigate to="/login" />
-          }
-        >
-          {/* Nested routes */}
-          <Route path="details" element={<ProfileDetails />} />
-          <Route path="settings" element={<ProfileSettings />} />
-        </Route>
+          element={isAuthenticated ? <Profile /> : <Login setIsAuthenticated={setIsAuthenticated} />}
+        />
 
-        {/* Dynamic route */}
-        <Route path="/post/:postId" element={<Post />} />
+        {/* Dynamic route for blog posts */}
+        <Route path="/blog/:id" element={<BlogPost />} />
 
         {/* Login */}
         <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
